@@ -45,14 +45,29 @@ def fetch_multiple_apod_data(api_key, start_date, end_date):
         try:
             request = requests.get(f'https://api.nasa.gov/planetary/apod?start_date={start_date}&end_date={end_date}&api_key=' + api_key)
             response_data = request.json()
-            
+            #check if file exists
+            if os.path.exists("apod_data.json"):
+                #if it does open the file in read mode and load the data into the dictionary
+                 with open("apod_data.json", "r") as json_file:
+                    try:
+                        data = json.load(json_file)
+                    #if an error occurs when loading the data reinitialise the dictionary    
+                    except json.JSONDecodeError:
+                        data = []
+            #if it does not exist initialise empty dictionary
+            else:
+                data = []
+                
             # Loop through all responses within date range
             for apod in response_data:
                 response = get_apod_data(api_key=api_key, date=apod["date"])
-                
-                #Open json file in append mode and append each result
-                with open("apod_data.json", "a+") as jsonfile:
-                    json.dump(response, jsonfile)
+                data.append(response)
+                 
+                #Open json file in write mode
+                with open("apod_data.json", "w") as json_file:
+                    json.dump(data, json_file, 
+                        indent=4,  
+                        separators=(',',': '))
                  
                 # One second delay between loop iterations
                 sleep(1)
@@ -65,11 +80,20 @@ def fetch_multiple_apod_data(api_key, start_date, end_date):
             print(f"An I/O error occurred when writing to this file. Error ID:{e.errno}, Description: {e.args}")
             
 def read_apod_data():
+    try:
+        with open("apod_data.json", "r") as read_file:
+            apod_data = json.load(read_file)
+    except PermissionError as e:
+        print(f"Permission denied: You do not have permission to read from this file. Error ID:{e.errno}")
         
-        
+    #Loop through and print data
+    for apod in apod_data:
+            print("Title: " + apod["title"] + " | " + "Date: " + apod["date"])
+            
 # Defining main function
 def main():   
-    fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
+    #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
+    read_apod_data()
 
 if __name__=="__main__":
     main()
