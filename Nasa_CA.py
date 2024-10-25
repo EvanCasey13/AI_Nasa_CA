@@ -45,6 +45,7 @@ def fetch_multiple_apod_data(api_key, start_date, end_date):
         try:
             request = requests.get(f'https://api.nasa.gov/planetary/apod?start_date={start_date}&end_date={end_date}&api_key=' + api_key)
             response_data = request.json()
+            #main issue here was writing to file only pushed json objects so intialising array of data to append data to fixed this issue
             #check if file exists
             if os.path.exists("apod_data.json"):
                 #if it does open the file in read mode and load the data into the dictionary
@@ -83,17 +84,47 @@ def read_apod_data():
     try:
         with open("apod_data.json", "r") as read_file:
             apod_data = json.load(read_file)
+            if len(apod_data) <= 0:
+                raise Exception("File is empty no data can be read")
     except PermissionError as e:
         print(f"Permission denied: You do not have permission to read from this file. Error ID:{e.errno}")
-        
-    #Loop through and print data
+    except FileNotFoundError as e:
+            print(f"IOError, File not found. Error ID:{e.errno}")  
+    #loop through and print data
     for apod in apod_data:
             print("Title: " + apod["title"] + " | " + "Date: " + apod["date"])
             
+def analyze_apod_media():
+    #intialize dictionary with two keys of media types
+    count_totals = {"image": 0, "video": 0}
+    #initialise variable to store apod object with max length
+    max_apod = None
+    #load the data
+    with open("apod_data.json", "r") as read_file:
+            apod_data = json.load(read_file)
+    #loop through the data
+    for apod in apod_data:
+        #get length of explanation variable for each apod
+        explanation_length = len(apod["explanation"])
+        #Check if max_apod is none and update the current apod data depending on if the
+        #current apod data 'explanation_length' is greater than the previous length for explanation for previous apod object
+        if max_apod is None or explanation_length > len(max_apod["explanation"]):
+            max_apod = apod
+        if apod["media type"] == "image":    
+            count_totals["image"] += 1
+        #else if the type is video increment video key by 1
+        elif apod["media type"] == "video":  
+            count_totals["video"] += 1    
+    #print total once loop has finished
+    print(count_totals)
+    #print the date from the apod with the longest explanation length
+    print(max_apod["date"])
+           
 # Defining main function
 def main():   
     #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
-    read_apod_data()
+    #read_apod_data()
+    analyze_apod_media()
 
 if __name__=="__main__":
     main()
