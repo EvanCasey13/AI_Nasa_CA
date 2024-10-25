@@ -1,5 +1,6 @@
 import requests
 import json
+import csv
 from time import sleep
 import pprint
 import os
@@ -71,8 +72,7 @@ def fetch_multiple_apod_data(api_key, start_date, end_date):
                         separators=(',',': '))
                  
                 # One second delay between loop iterations
-                sleep(1)
-                
+                sleep(1)      
         except ConnectionError as e:
             print(f"Network issues have prevented retrieval of data from the API")
         except PermissionError as e:    
@@ -119,12 +119,36 @@ def analyze_apod_media():
     print(count_totals)
     #print the date from the apod with the longest explanation length
     print(max_apod["date"])
-           
+    
+def write_to_csv(api_key, start_date, end_date):
+    #field names for csv file writing
+    field_names = ['date', 'title', 'media_type', 'media', 'url']
+    #load data
+    request = requests.get(f'https://api.nasa.gov/planetary/apod?start_date={start_date}&end_date={end_date}&api_key=' + api_key)
+    response_data = request.json()
+    try:     
+                #open csv file
+                with open('apod_summary.csv', 'a', newline='') as csv_file:
+                    #initialise CSV writer
+                    csv_writer = csv.DictWriter(csv_file, fieldnames=field_names)
+                    csv_writer.writeheader()
+                    #loop through the data
+                    for apod in response_data:  
+                        csv_writer.writerow({
+                            "date": apod['date'],
+                            "title": apod['title'],
+                            "media": apod['media_type'],
+                            "url": apod['url']
+                        })
+    except FileNotFoundError as e:
+        print(f"File does not exist {e.args}")
+               
 # Defining main function
 def main():   
     #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
     #read_apod_data()
-    analyze_apod_media()
+    #analyze_apod_media()
+    write_to_csv(api_key=api_key, start_date=start_date, end_date=end_date)
 
 if __name__=="__main__":
     main()
