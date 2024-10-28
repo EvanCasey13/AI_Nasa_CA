@@ -1,4 +1,5 @@
 import requests
+import numpy as np
 import json
 import csv
 from time import sleep
@@ -142,13 +143,22 @@ def write_to_csv(api_key, start_date, end_date):
                         })
     except FileNotFoundError as e:
         print(f"File does not exist {e.args}")
-               
+        
+# Probem 3 - Numpy
+# NumPy Array definition
+array = np.random.randint(100, size=(20, 5))
+for row, column in np.ndindex(array.shape):
+    #if the value at position is not even replace it with even value
+       if array[row, column] % 2 != 0:
+           array[row, column] = np.random.randint(0, 100) * 2
+           
 # Defining main function
 def main():   
     #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
     #read_apod_data()
     #analyze_apod_media()
-    write_to_csv(api_key=api_key, start_date=start_date, end_date=end_date)
+    #write_to_csv(api_key=api_key, start_date=start_date, end_date=end_date)
+    print(array)
 
 if __name__=="__main__":
     main()
