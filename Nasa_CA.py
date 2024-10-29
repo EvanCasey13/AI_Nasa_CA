@@ -1,5 +1,6 @@
 import requests
 import numpy as np
+import pandas as pd
 import json
 import csv
 from time import sleep
@@ -7,6 +8,7 @@ import pprint
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
 #Variables
 api_key = os.getenv('API_KEY')
 test_date="2024-10-20"
@@ -184,15 +186,38 @@ def numpy_problem():
     #variance for each of 5 columns in dataset
     for i in range(0, 5, 1):
         print(np.var(array[:, i]))
+        
+def pandas_question():  
+    #read iris csv into dataframe
+    df = pd.read_csv('iris.csv')
+    
+    #total data points
+    print(df.count())
+    
+    #data types of five columns
+    print(df.dtypes)
+    
+    #dataframe column names
+    print(df.columns)
+    
+    #total different species of flower
+    species_diff_count = len(pd.unique(df['Species']))
+    print("Number of unique species: " + str(species_diff_count))
             
 # Defining main function
 def main():   
     #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
+    
+    """Problem 2 - JSON Data"""
     #read_apod_data()
     #analyze_apod_media()
     #write_to_csv(api_key=api_key, start_date=start_date, end_date=end_date)
+    
     """Problem 3 - Numpy"""
-    numpy_problem()
-
+    #numpy_problem()
+    
+    """Problem 4 - Pandas DataFrames"""
+    pandas_question()
+    
 if __name__=="__main__":
     main()
