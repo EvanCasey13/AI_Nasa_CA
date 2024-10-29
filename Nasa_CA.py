@@ -174,6 +174,16 @@ def numpy_problem():
             array[row, column] = array_mean
         else:
             pass
+        
+    #numpy statistical operations    
+    mean = np.mean(array)
+    std_dev = np.std(array)
+    median = np.median(array)
+    print("median: " + str(median) + ", mean: " + str(mean) + ", standard deviation: " + str(std_dev))
+    
+    #variance for each of 5 columns in dataset
+    for i in range(0, 5, 1):
+        print(np.var(array[:, i]))
             
 # Defining main function
 def main():   
