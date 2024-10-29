@@ -144,21 +144,45 @@ def write_to_csv(api_key, start_date, end_date):
     except FileNotFoundError as e:
         print(f"File does not exist {e.args}")
         
-# Probem 3 - Numpy
-# NumPy Array definition
-array = np.random.randint(100, size=(20, 5))
-for row, column in np.ndindex(array.shape):
-    #if the value at position is not even replace it with even value
-       if array[row, column] % 2 != 0:
-           array[row, column] = np.random.randint(0, 100) * 2
+#numpy array definition
+def numpy_problem():
+    array = np.random.randint(100, size=(20, 5))
+    for row, column in np.ndindex(array.shape):
+        #if the value at position is not even replace it with even value
+            if array[row, column] % 2 != 0:
+                array[row, column] = np.random.randint(0, 100) * 2
            
+    #sum of all values in array must be a multiple of 5
+    array_sum = np.sum(array)  
+    if array_sum % 5 == 0:
+        print(array_sum)
+        
+    #extract and print all elements in array that are divisble by both 3 and 5
+    elements = []
+    for row, column in np.ndindex(array.shape):
+        if array[row, column] % 5 == 0 and array[row, column] % 3 == 0:
+            elements.append(array[row, column])
+    print(elements)
+    
+    #replace all elements greater than 75 with array mean
+    array_mean = np.mean(array)
+    #loop through each row and column position    
+    for row, column in np.ndindex(array.shape):
+        #if the value returned is greater than 75 set the new value to array mean
+        if array[row, column] >= 75:
+            #set the value at this row & column to be the value of the mean
+            array[row, column] = array_mean
+        else:
+            pass
+            
 # Defining main function
 def main():   
     #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
     #read_apod_data()
     #analyze_apod_media()
     #write_to_csv(api_key=api_key, start_date=start_date, end_date=end_date)
-    print(array)
+    """Problem 3 - Numpy"""
+    numpy_problem()
 
 if __name__=="__main__":
     main()
