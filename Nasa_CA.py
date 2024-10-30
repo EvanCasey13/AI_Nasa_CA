@@ -1,6 +1,7 @@
 import requests
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import json
 import csv
 from time import sleep
@@ -190,20 +191,67 @@ def numpy_problem():
 def pandas_question():  
     #read iris csv into dataframe
     df = pd.read_csv('iris.csv')
-    
-    #total data points
+    """#total data points
     print(df.count())
     
     #data types of five columns
     print(df.dtypes)
     
     #dataframe column names
-    print(df.columns)
+    print(df.columns)"""
     
     #total different species of flower
-    species_diff_count = len(pd.unique(df['Species']))
-    print("Number of unique species: " + str(species_diff_count))
+    """species_diff_count = len(pd.unique(df['Species']))
+    print("Number of unique species: " + str(species_diff_count))"""
+
+    #errors in rows 35 and 38 fixes using iloc 
+    """#row 35 data error fix
+    df.at[34, 'Sepal.Length']=4.9
+    df.at[34, 'Sepal.Width']=3.1
+    df.at[34, 'Petal.Length']=1.5
+    df.at[34, 'Petal.Width']=0.2
+    df.at[34, 'Species']='setosa'
+    
+    #row 38 data error fix
+    df.at[37, 'Sepal.Length']=4.9
+    df.at[37, 'Sepal.Width']=3.6
+    df.at[37, 'Petal.Length']=1.4
+    df.at[37, 'Petal.Width']=0.1
+    df.at[37, 'Species']='setosa'
+    
+    print("Row 35 fixed data")
+    print(df.iloc[34])
+    print("Row 38 fixed data")
+    print(df.iloc[37])"""
             
+    #add two new features to dataset
+    df_copy = df.copy()
+    
+    #create two new ratio columns
+    df_copy['Petal.Ratio'] = df_copy['Petal.Length'] / df_copy['Petal.Width']
+    df_copy['Sepal.Ratio'] = df_copy['Sepal.Length'] / df_copy['Sepal.Width']
+    
+    """#Write dataframe to CSV file iris_corrected.csv
+    df_copy.to_csv(
+        path_or_buf='iris_corrected.csv',
+        mode='w'
+    )"""
+    
+    #pairwise correlation
+    #limit dataframe to only numerical columns
+    """df_numerical = df_copy[['Sepal.Length', 'Sepal.Width', 'Petal.Length', 'Petal.Width', 'Petal.Ratio', 'Sepal.Ratio']]
+    print(df_numerical.corr())"""
+    
+    #scatterplot with Sepal.Ratio on x-axis & Petal.Ratio on y-axis
+    #define colors for type
+    colors = {'setosa': 'green', 'versicolor': 'orange', 'virginica': 'red'}
+    point_colors = [colors[group] for group in df_copy['Species']]
+    
+    #linear regression for species between ratios
+    
+    plt.scatter(df_copy["Petal.Ratio"], df_copy["Petal.Ratio"], c=point_colors)
+    plt.show()
+    
 # Defining main function
 def main():   
     #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
