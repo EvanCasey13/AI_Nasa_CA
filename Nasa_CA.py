@@ -2,6 +2,7 @@ import requests
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
 import json
 import csv
 from time import sleep
@@ -248,8 +249,13 @@ def pandas_question():
     point_colors = [colors[group] for group in df_copy['Species']]
     
     #linear regression for species between ratios
+    df_petal_ratio = df_copy["Petal.Ratio"]
+    df_sepal_ratio = df_copy["Sepal.Ratio"]
     
-    plt.scatter(df_copy["Petal.Ratio"], df_copy["Petal.Ratio"], c=point_colors)
+    r = np.polyfit(df_petal_ratio, df_sepal_ratio, 1)
+    r_estimate = np.poly1d(r)
+    
+    plt.scatter(df_copy["Sepal.Ratio"], df_copy["Petal.Ratio"], c=point_colors)
     plt.show()
     plt.savefig("iris_scatter_with_regression.pdf")
     
