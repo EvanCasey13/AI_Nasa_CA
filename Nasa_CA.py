@@ -251,6 +251,7 @@ def pandas_question():
     
     plt.scatter(df_copy["Petal.Ratio"], df_copy["Petal.Ratio"], c=point_colors)
     plt.show()
+    plt.savefig("iris_scatter_with_regression.pdf")
     
 # Defining main function
 def main():   
