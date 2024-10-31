@@ -2,7 +2,7 @@ import requests
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
+from scipy import stats 
 import json
 import csv
 from time import sleep
@@ -252,10 +252,12 @@ def pandas_question():
     df_petal_ratio = df_copy["Petal.Ratio"]
     df_sepal_ratio = df_copy["Sepal.Ratio"]
     
-    r = np.polyfit(df_petal_ratio, df_sepal_ratio, 1)
-    r_estimate = np.poly1d(r)
+    slope, intercept, r_value, p_value, std_err = stats.linregress(df_sepal_ratio, df_petal_ratio) 
+    y_pred = [slope * xi + intercept for xi in df_sepal_ratio]
     
     plt.scatter(df_copy["Sepal.Ratio"], df_copy["Petal.Ratio"], c=point_colors)
+    # Add regression line to the plot
+    plt.plot(df_sepal_ratio, y_pred)
     plt.show()
     plt.savefig("iris_scatter_with_regression.pdf")
     
