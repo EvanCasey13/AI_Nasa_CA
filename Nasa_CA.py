@@ -1,6 +1,7 @@
 import requests
 import numpy as np
 import pandas as pd
+import seaborn as sb
 import matplotlib.pyplot as plt
 from scipy import stats 
 import json
@@ -244,7 +245,7 @@ def pandas_question():
     print(df_numerical.corr())"""
     
     #scatterplot with Sepal.Ratio on x-axis & Petal.Ratio on y-axis
-    #define colors for type
+    """#define colors for type
     colors = {'setosa': 'green', 'versicolor': 'orange', 'virginica': 'red'}
     point_colors = [colors[group] for group in df_copy['Species']]
     
@@ -259,7 +260,11 @@ def pandas_question():
     # Add regression line to the plot
     plt.plot(df_sepal_ratio, y_pred)
     plt.show()
-    plt.savefig("iris_scatter_with_regression.pdf")
+    plt.savefig("iris_scatter_with_regression.pdf")"""
+    
+    #pairplot using seaborn
+    sb.pairplot(df_copy, hue='Species')
+    plt.show()
     
 # Defining main function
 def main():   
