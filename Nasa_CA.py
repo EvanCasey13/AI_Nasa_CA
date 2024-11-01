@@ -55,14 +55,14 @@ def fetch_multiple_apod_data(api_key, start_date, end_date):
             #main issue here was writing to file only pushed json objects so intialising array of data to append data to fixed this issue
             #check if file exists
             if os.path.exists("apod_data.json"):
-                #if it does open the file in read mode and load the data into the dictionary
+                #if it does open the file in read mode and load the data into the array
                  with open("apod_data.json", "r") as json_file:
                     try:
                         data = json.load(json_file)
-                    #if an error occurs when loading the data reinitialise the dictionary    
+                    #if an error occurs when loading the data reinitialise the array   
                     except json.JSONDecodeError:
                         data = []
-            #if it does not exist initialise empty dictionary
+            #if it does not exist initialise empty array
             else:
                 data = []
                 
@@ -174,7 +174,7 @@ def numpy_problem():
     #loop through each row and column position    
     for row, column in np.ndindex(array.shape):
         #if the value returned is greater than 75 set the new value to array mean
-        if array[row, column] >= 75:
+        if array[row, column] > 75:
             #set the value at this row & column to be the value of the mean
             array[row, column] = array_mean
         else:
@@ -271,7 +271,7 @@ def main():
     #fetch_multiple_apod_data(api_key=api_key, start_date=start_date, end_date=end_date)
     
     """Problem 2 - JSON Data"""
-    #read_apod_data()
+    read_apod_data()
     #analyze_apod_media()
     #write_to_csv(api_key=api_key, start_date=start_date, end_date=end_date)
     
@@ -279,7 +279,7 @@ def main():
     #numpy_problem()
     
     """Problem 4 - Pandas DataFrames"""
-    pandas_question()
+    #pandas_question()
     
 if __name__=="__main__":
     main()
